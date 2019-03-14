@@ -14,6 +14,7 @@ class App extends Component {
     load: true // To controle the loading page
   };
 
+  // This method handelling the author's detail after clicking a card of any author
   selectAuthor = async author => {
     this.setState({ load: true });
     try {
@@ -27,9 +28,11 @@ class App extends Component {
     this.setState({ load: false });
   };
 
+  // Reset authors list from the button "Authors" on Sidebar
   unselectAuthor = () =>
     this.setState({ currentAuthor: null, filteredAuthors: this.state.authors });
 
+  // Filtering authors that the user search for from the search field
   filterAuthors = query => {
     query = query.toLowerCase();
     let filteredAuthors = this.state.authors.filter(author => {
@@ -72,6 +75,7 @@ class App extends Component {
 
   render() {
     if (this.state.load) {
+      // Showing loading page if the authors data still fitching
       return (
         <div className="container-fluid">
           <div className="row my-4 justify-content-md-center">
@@ -82,12 +86,15 @@ class App extends Component {
         </div>
       );
     } else {
+      // Showing home page after finished fitching data
       return (
         <div id="app" className="container-fluid">
           <div className="row">
             <div className="col-2">
+              {/* Sidebar Section */}
               <Sidebar unselectAuthor={this.unselectAuthor} />
             </div>
+            {/* Content Section */}
             <div className="content col-10">{this.getContentView()}</div>
           </div>
         </div>
