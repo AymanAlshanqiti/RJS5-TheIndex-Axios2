@@ -9,12 +9,23 @@ import Axios from "axios";
 class App extends Component {
   state = {
     authors: [],
-    currentAuthor: null,
-    filteredAuthors: [],
-    load: true
+    currentAuthor: null, // It ganna change when the user click on any author card
+    filteredAuthors: [], // It ganna change when the user type in the search bar
+    load: true // To controle the loading page
   };
 
-  selectAuthor = author => this.setState({ currentAuthor: author });
+  selectAuthor = async author => {
+    this.setState({ load: true });
+    try {
+      const res = await Axios.get(
+        `https://the-index-api.herokuapp.com/api/authors/${author.id}`
+      );
+      this.setState({ currentAuthor: res.data });
+    } catch (error) {
+      console.error(error);
+    }
+    this.setState({ load: false });
+  };
 
   unselectAuthor = () =>
     this.setState({ currentAuthor: null, filteredAuthors: this.state.authors });
@@ -50,7 +61,7 @@ class App extends Component {
       );
       this.setState({ authors: res.data, filteredAuthors: res.data });
     } catch (error) {
-      console.error();
+      console.error(error);
     }
     this.setState({ load: false });
   };
